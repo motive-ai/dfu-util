@@ -1,6 +1,6 @@
 /*
  * DfuSe specific functions
- * 
+ *
  * This implements the ST Microsystems DFU extensions (DfuSe)
  * as per the DfuSe 1.1a specification (ST documents AN3156, AN2606)
  * The DfuSe file format is described in ST document UM0391.
@@ -34,7 +34,7 @@
 #include "dfuse.h"
 #include "dfuse_mem.h"
 
-#define DFU_TIMEOUT 5000
+#define DFU_TIMEOUT 10000
 
 extern int verbose;
 static unsigned int last_erased_page = 1; /* non-aligned value, won't match */
@@ -475,7 +475,7 @@ int dfuse_dnload_element(struct dfu_if *dif, unsigned int dwElementAddress,
 		} else {
 			dfu_progress_bar("Download", p, dwElementSize);
 		}
-		
+
 		dfuse_special_command(dif, address, SET_ADDRESS);
 
 		/* transaction = 2 for no address offset */
