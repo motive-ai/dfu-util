@@ -23,30 +23,41 @@ find_package(Threads REQUIRED)
 
 #target_link_libraries(dfu PUBLIC ${LIBUSB_LIBRARIES})
 
+set(DFU_LIB_SRC dfu.c
+                dfu_file.c
+                dfu_load.c
+                dfuse.c
+                dfuse_mem.c
+                quirks.c
+                dfu_util.c)
+
 add_executable(dfu-util
-               dfu.c
-               dfu_file.c
-               dfu_load.c
-               dfuse.c
-               dfuse_mem.c
-               quirks.c
-               dfu_util.c
+               ${DFU_LIB_SRC}
                main.c)
 
-target_include_directories(dfu-util PUBLIC ${CMAKE_CURRENT_BINARY_DIR})
-add_dependencies(dfu-util libusb)
-target_link_libraries(dfu-util PUBLIC
-    ${LIBUSB_LIBRARIES} ${CMAKE_THREAD_LIBS_INIT}
-)
+add_executable(dfu-suffix
+               dfu_file.c
+               dfu_load.c
+               dfu.c
+               suffix.c)
 
-if(WIN32)
-  include_directories(${PTHREAD_INCLUDE_DIRS})
-  target_link_libraries(dfu-util PUBLIC ${PTHREAD_LIBRARIES})
-else()
-   target_link_libraries(dfu-util PUBLIC Threads::Threads)
-endif()
+foreach(program dfu-util dfu-suffix)
+    target_include_directories(${program} PUBLIC ${CMAKE_CURRENT_BINARY_DIR})
+    add_dependencies(${program} libusb)
+    target_link_libraries(${program} PUBLIC
+        ${LIBUSB_LIBRARIES} ${CMAKE_THREAD_LIBS_INIT}
+    )
+    if(WIN32)
+      include_directories(${PTHREAD_INCLUDE_DIRS})
+      target_link_libraries(${program} PUBLIC ${PTHREAD_LIBRARIES})
+    else()
+       target_link_libraries(${program} PUBLIC Threads::Threads)
+    endif()
+endforeach()
 
-install(TARGETS dfu-util
+set(DFU_SUFFIX_EXE ${CMAKE_CURRENT_BINARY_DIR}/dfu-suffix CACHE INTERNAL "dfu-suffix executable")
+
+install(TARGETS dfu-util dfu-suffix
         RUNTIME DESTINATION bin
         LIBRARY DESTINATION lib
         ARCHIVE DESTINATION lib/static)
