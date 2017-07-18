@@ -2,6 +2,7 @@ cmake_minimum_required (VERSION 3.3)
 
 include_directories(${LIBUSB_INCLUDE_DIRS} ${PTHREAD_INCLUDE_DIRS})
 
+file(WRITE ${CMAKE_CURRENT_BINARY_DIR}/config.h "")
 if(WIN32)
     add_definitions(-DHAVE_WINDOWS_H)
 else()
@@ -32,6 +33,7 @@ add_executable(dfu-util
                dfu_util.c
                main.c)
 
+target_include_directories(dfu-util PUBLIC ${CMAKE_CURRENT_BINARY_DIR})
 add_dependencies(dfu-util libusb)
 target_link_libraries(dfu-util PUBLIC
     ${LIBUSB_LIBRARIES} ${CMAKE_THREAD_LIBS_INIT}
