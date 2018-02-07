@@ -23,7 +23,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <stdint.h>
-#include <getopt.h>
+#include "getopt.h"
 #include <string.h>
 
 #include "portable.h"

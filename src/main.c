@@ -27,7 +27,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
-#include <getopt.h>
+#include "getopt.h"
 #include <libusb.h>
 #include <errno.h>
 #include <fcntl.h>
