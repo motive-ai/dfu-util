@@ -23,7 +23,11 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <stdint.h>
-#include "getopt.h"
+#ifdef WIN32
+  #include "getopt-win.h"
+#else
+  #include <getopt.h>
+#endif
 #include <string.h>
 
 #include "portable.h"
