@@ -174,7 +174,7 @@ uint32_t dfu_file_write_crc(int f, uint32_t crc, const void *buf, int size)
 
 void dfu_load_file(struct dfu_file *file, enum suffix_req check_suffix, enum prefix_req check_prefix)
 {
-	off_t offset;
+	long int offset;
 	int f;
 	int i;
 	int res;
