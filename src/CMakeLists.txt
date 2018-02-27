@@ -55,7 +55,7 @@ foreach(program dfu-util dfu-suffix)
     endif()
 endforeach()
 
-set(DFU_SUFFIX_EXE ${CMAKE_CURRENT_BINARY_DIR}/dfu-suffix CACHE INTERNAL "dfu-suffix executable")
+set(DFU_SUFFIX_EXE $<TARGET_FILE:dfu-suffix> CACHE INTERNAL "dfu-suffix executable")
 
 install(TARGETS dfu-util dfu-suffix
         RUNTIME DESTINATION bin
