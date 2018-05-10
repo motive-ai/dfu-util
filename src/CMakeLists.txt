@@ -1,21 +1,6 @@
 cmake_minimum_required (VERSION 3.3)
 
-include_directories(${LIBUSB_INCLUDE_DIRS} ${PTHREAD_INCLUDE_DIRS})
-
 file(WRITE ${CMAKE_CURRENT_BINARY_DIR}/config.h "")
-if(WIN32)
-    add_definitions(-DHAVE_WINDOWS_H)
-else()
-    add_definitions(-DHAVE_CONFIG_H)
-    add_definitions(-DPACKAGE_STRING="dfu-util 0.9")
-    add_definitions(-DPACKAGE_BUGREPORT="http://sourceforge.net/p/dfu-util/tickets/")
-    add_definitions(-DPACKAGE="dfu-util")
-    add_definitions(-DPACKAGE_VERSION="0.9")
-    add_definitions(-DHAVE_UNISTD_H)
-    add_definitions(-DHAVE_NANOSLEEP)
-    add_definitions(-DHAVE_ERR)
-    add_definitions(-DHAVE_SYSEXITS_H)
-endif()
 
 set(THREADS_PREFER_PTHREAD_FLAG ON)
 set(THREADS_USE_PTHREADS_WIN32 ON)
@@ -42,16 +27,35 @@ add_executable(dfu-suffix
                suffix.c)
 
 foreach(program dfu-util dfu-suffix)
-    target_include_directories(${program} PUBLIC ${CMAKE_CURRENT_BINARY_DIR})
+    target_include_directories(${program} PUBLIC
+        ${CMAKE_CURRENT_BINARY_DIR}
+        ${LIBUSB_INCLUDE_DIRS}
+        ${PTHREAD_INCLUDE_DIRS}
+    )
     add_dependencies(${program} libusb)
     target_link_libraries(${program} PUBLIC
         ${LIBUSB_LIBRARIES} ${CMAKE_THREAD_LIBS_INIT}
     )
     if(WIN32)
-      include_directories(${PTHREAD_INCLUDE_DIRS})
+      target_include_directories(${program} PUBLIC ${PTHREAD_INCLUDE_DIRS})
       target_link_libraries(${program} PUBLIC ${PTHREAD_LIBRARIES})
     else()
        target_link_libraries(${program} PUBLIC Threads::Threads)
+    endif()
+    if(WIN32)
+        target_compile_definitions(${program} PRIVATE HAVE_WINDOWS_H)
+    else()
+        target_compile_definitions(${program} PRIVATE
+            HAVE_CONFIG_H
+            PACKAGE_STRING="dfu-util 0.9"
+            PACKAGE_BUGREPORT="http://sourceforge.net/p/dfu-util/tickets/"
+            PACKAGE="dfu-util"
+            PACKAGE_VERSION="0.9"
+            HAVE_UNISTD_H
+            HAVE_NANOSLEEP
+            HAVE_ERR
+            HAVE_SYSEXITS_H
+        )
     endif()
 endforeach()
 
