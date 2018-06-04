@@ -6,8 +6,6 @@ set(THREADS_PREFER_PTHREAD_FLAG ON)
 set(THREADS_USE_PTHREADS_WIN32 ON)
 find_package(Threads REQUIRED)
 
-#target_link_libraries(dfu PUBLIC ${LIBUSB_LIBRARIES})
-
 set(DFU_LIB_SRC dfu.c
                 dfu_file.c
                 dfu_load.c
@@ -32,9 +30,8 @@ foreach(program dfu-util dfu-suffix)
         ${LIBUSB_INCLUDE_DIRS}
         ${PTHREAD_INCLUDE_DIRS}
     )
-    add_dependencies(${program} libusb)
-    target_link_libraries(${program} PUBLIC
-        ${LIBUSB_LIBRARIES} ${CMAKE_THREAD_LIBS_INIT}
+    target_link_libraries(${program} PRIVATE
+        Usb::Usb ${CMAKE_THREAD_LIBS_INIT}
     )
     if(WIN32)
       target_include_directories(${program} PUBLIC ${PTHREAD_INCLUDE_DIRS})
