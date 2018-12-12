@@ -32,7 +32,7 @@ else()
             )
 endif()
 
-target_include_directories(dfulib PUBLIC ${CMAKE_CURRENT_BINARY_DIR})
+target_include_directories(dfulib PUBLIC ${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_BINARY_DIR})
 
 add_executable(dfu-util
                main.c)
