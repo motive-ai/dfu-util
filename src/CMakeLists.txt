@@ -1,5 +1,5 @@
 cmake_minimum_required (VERSION 3.3)
-
+PROJECT (dfu C CXX )
 file(WRITE ${CMAKE_CURRENT_BINARY_DIR}/config.h "")
 
 set(THREADS_PREFER_PTHREAD_FLAG ON)
