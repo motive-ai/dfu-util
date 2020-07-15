@@ -14,7 +14,7 @@ add_library(dfulib dfu.c
                 quirks.c
                 dfu_util.c)
 
-target_link_libraries(dfulib PUBLIC Usb::Usb)
+target_link_libraries(dfulib PUBLIC CONAN_PKG::libusb)
 
 if(WIN32)
     target_compile_definitions(dfulib PUBLIC HAVE_WINDOWS_H)
